@@ -30,9 +30,9 @@ export default function Footer() {
             
             </HStack>
             <Text> | </Text>
-            <Text fontStyle={"medium"}>Github: </Text>
-            <a href={'https://twitter.com/Flippand0'} target="_blank" rel="noopener noreferrer">
-              <Icon as={FaTwitter} w={5} h={5} alignSelf="right" color={'#eeeeee'}/> 
+            
+            <a href={'https://github.com/irreverentsimplicity/next-gno-dapp/'} target="_blank" rel="noopener noreferrer">
+            <Text fontStyle={"medium"}>Github</Text>  
             </a>
           </HStack>
           
