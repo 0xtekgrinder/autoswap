@@ -1,6 +1,6 @@
 const initialState = {
   blockchainName: undefined,
-  rpcEndpoint: "https://rpc.irreverentsimplicity.xyz",
+  rpcEndpoint: "http://localhost:26657",
   testnet: true,
   mainnet: false,
   userGnotBalances: undefined,

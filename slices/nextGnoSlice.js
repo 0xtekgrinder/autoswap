@@ -6,7 +6,7 @@ const nextGnoSlice = createSlice({
     blockchainName: undefined,
     testnet: true,
     mainnet: false,
-    rpcEndpoint: "https://rpc.irreverentsimplicity.xyz",
+    rpcEndpoint: "http://localhost:26657",
     userGnotBalances: undefined,
     userLoggedIn: 0,
     tasks: [],

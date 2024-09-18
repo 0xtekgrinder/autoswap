@@ -3,6 +3,7 @@ import { FaWallet, FaPowerOff} from 'react-icons/fa';
 import { Icon, Select, Button } from "@chakra-ui/react";
 import { useSelector, useDispatch } from "react-redux";
 import { setRpcEndpoint, 
+  setNextGnoRealm,
   setUserLoggedStatus, 
   setUserGnotBalances, 
   } from "../slices/nextGnoSlice";
@@ -41,19 +42,16 @@ const Wallet = ({ userGnotBalances }) => {
       dispatch(setRpcEndpoint(newNetwork))
       const actionsInstance = await Actions.getInstance();
       let faucetUrl = "https://faucet.irreverentsimplicity.xyz";
-      let flippandoRealm = "gno.land/r/flippando/flippando";
+      let nextGnoRealm = "gno.land/r/zentasktic/zentasktic_project";
       if (newNetwork === "http://localhost:26657"){
         faucetUrl = "http://127.0.0.1:5050";
-        flippandoRealm = "gno.land/r/demo/flippando"
+        nextGnoRealm = "gno.land/r/demo/zentasktic_core"
       } else if (newNetwork === "https://rpc.irreverentsimplicity.xyz") {
         faucetUrl = "https://faucet.irreverentsimplicity.xyz";
-        flippandoRealm = "gno.land/r/flippando/flippando"
-      } else if (newNetwork === "https://portal-loop.gnoteam.com"){
-        faucetUrl = "https://faucet.flippando.xyz";
-        flippandoRealm = "gno.land/r/demo/flippando/v1"
-      }
+        nextGnoRealm = "gno.land/r/zentasktic/zentasktic_project"
+      } 
       actionsInstance.setFaucetUrl(faucetUrl);
-      actionsInstance.setFlippandoRealm(flippandoRealm);
+      actionsInstance.setNextGnoRealm(nextGnoRealm);
       actionsInstance.setRpcUrl(newNetwork);
     };
 

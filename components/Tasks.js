@@ -15,7 +15,6 @@ const Tasks = () => {
   const [isAdding, setIsAdding] = useState(false);
   const [deletingTaskId, setDeletingTaskId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [sendingTaskId, setSendingTaskId] = useState(null);
 
   useEffect(() => {
     fetchAllTasksByRealm(dispatch, "1");
@@ -48,19 +47,6 @@ const Tasks = () => {
         console.log("error in calling RemoveTask", err);
       }
     setDeletingTaskId(null);
-  };
-
-  const handleSendTaskToDecide = async (taskId) => {
-    setSendingTaskId(taskId)
-    const actions = await Actions.getInstance();
-    //actions.setCoreRealm(Config.GNO_ZENTASKTIC_CORE_REALM);
-    try {
-        await actions.MoveTaskToRealm(taskId, "2");
-        fetchAllTasksByRealm(dispatch, "1");
-      } catch (err) {
-        console.log("error in calling handleSendTaskToDecide", err);
-      }
-     setSendingTaskId(null)
   };
 
   const handleEditTask = (task) => {
@@ -133,13 +119,6 @@ const Tasks = () => {
                       
                     {task.taskBody}
                   </Box>
-                  <IconButton
-                    isLoading={sendingTaskId === task.taskId}
-                    icon={sendingTaskId === task.taskId ?  <Spinner size="sm" /> : <ArrowForwardIcon />}
-                    onClick={() => handleSendTaskToDecide(task.taskId)}
-                    colorScheme="orange"
-                    ml={2}
-                  />
                 </Flex>
               )}
             </ListItem>
