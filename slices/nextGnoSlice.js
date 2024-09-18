@@ -8,8 +8,16 @@ const nextGnoSlice = createSlice({
     mainnet: false,
     rpcEndpoint: "https://rpc.irreverentsimplicity.xyz",
     userGnotBalances: undefined,
+    userLoggedIn: 0,
+    tasks: [],
   },
   reducers: {
+    setUserLoggedStatus(state, action){
+      state.userLoggedIn = action.payload;
+    },
+    setTasks(state, action) {
+      state.tasks = action.payload;
+    },
     setBlockchain(state, action) {
       state.blockchainName = action.payload;
     },
@@ -25,6 +33,8 @@ const nextGnoSlice = createSlice({
 });
 
 export const { 
+  setUserLoggedStatus,
+  setTasks,
   setBlockchain, 
   setUserGnotBalances, 
   setRpcEndpoint } = nextGnoSlice.actions;

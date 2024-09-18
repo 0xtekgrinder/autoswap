@@ -24,14 +24,14 @@ const PasswordProtectedLogin = () => {
         fontWeight="bold"
         _hover={{bg: "purple.800"}}
       
-      >{userLoggedIn === "0" ? "Log in to play" : "Join Dapp"}</Button>
+      >{userLoggedIn === "0" ? "Log in to Dapp" : "Join Dapp"}</Button>
 
       <Drawer isOpen={isDrawerOpen} placement="right" onClose={toggleDrawer}>
         <DrawerOverlay />
         <DrawerContent
         bgGradient="linear(to-br, purple.900, purple.600)">
           <DrawerCloseButton />
-          <DrawerHeader>{userLoggedIn === "0" ? "Log in to play" : "Join Dapp"}</DrawerHeader>
+          <DrawerHeader>{userLoggedIn === "0" ? "Log in to Dapp" : "Join Dapp"}</DrawerHeader>
 
           <DrawerBody>
             {userLoggedIn === "0" ? <PasswordLoginForm /> : <PasswordSetupForm />}

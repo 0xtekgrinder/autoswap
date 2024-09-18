@@ -4,6 +4,8 @@ const initialState = {
   testnet: true,
   mainnet: false,
   userGnotBalances: undefined,
+  userLoggedIn: 0,
+  tasks: [],
 };
 
     

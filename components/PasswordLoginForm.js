@@ -2,6 +2,7 @@ import { Input, Button, FormControl, FormLabel, Text } from "@chakra-ui/react";
 import { getEncryptedMnemonicFromIndexedDB } from '../util/dblayer'; 
 import { GnoWallet } from '@gnolang/gno-js-client';
 import Actions from '../util/actions'; 
+import Config from '../util/config';
 import { decryptMnemonic, deriveKey } from "../util/crypto";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -50,6 +51,7 @@ const PasswordLoginForm = () => {
     
     actions.setWallet(wallet);
     actions.connectWallet();
+    actions.setNextGnoRealm(Config.GNO_NEXT_REALM)
     await getGNOTBalances(dispatch)
     
     dispatch(setUserLoggedStatus("1"))

@@ -1,13 +1,14 @@
 import { Input, Button, FormControl, FormLabel, Switch, Textarea, Text } from "@chakra-ui/react";
 import { useState } from "react";
 import { GnoWallet } from '@gnolang/gno-js-client';
+import Config from "../util/config";
 import Actions from '../util/actions'; 
 import { saveEncryptedMnemonicToIndexedDB } from '../util/dblayer'; 
 import { deriveKey, encryptMnemonic, validateMnemonic } from '../util/crypto';
 import { generateMnemonic } from "../util/crypto";
 import { useDispatch } from "react-redux";
 import { setUserLoggedStatus } from "../slices/nextGnoSlice";
-import { getGNOTBalances, fetchUserFLIPBalances } from "../util/tokenActions";
+import { getGNOTBalances } from "../util/tokenActions";
 
 const PasswordSetupForm = () => {
   const [password, setPassword] = useState("");
@@ -54,9 +55,9 @@ const PasswordSetupForm = () => {
       const actions = await Actions.getInstance();
       actions.setWallet(wallet);
       actions.connectWallet();
+      actions.setNextGnoRealm(Config.GNO_NEXT_REALM)
       //await actions.setFaucetToken("flippando");
       await getGNOTBalances(dispatch)
-      await fetchUserFLIPBalances(dispatch)
       dispatch(setUserLoggedStatus("1"));
 
     } catch (err) {

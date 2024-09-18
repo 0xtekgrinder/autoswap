@@ -6,7 +6,7 @@ import styles from '../styles/Home.module.css'
 export const getServerSideProps = async (context) => {
   return {
     redirect: {
-      destination: '/blog', 
+      destination: '/example', 
       permanent: false,     
     },
   };

@@ -54,7 +54,7 @@ const Menu = () => {
   return (
     <Box width="200px" height="80vh" bg="transparent" borderRadius="lg" p={2}  display="flex" flexDirection="column">
       <VStack align="stretch" spacing={4}>
-        <MenuItem href="/blog">Blog</MenuItem>
+        <MenuItem href="/example">Todo Example</MenuItem>
       </VStack>
       <Spacer/>
       

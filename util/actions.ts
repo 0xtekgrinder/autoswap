@@ -74,11 +74,38 @@ class Actions {
     if (!Actions.instance) {
       Actions.instance = new Actions();
       Actions.initPromise = new Promise(async (resolve) => {
+        await Actions.instance.initialize();
         resolve(Actions.instance);
       });
       return Actions.initPromise;
     } else {
       return Actions.initPromise;
+    }
+  }
+
+  /**
+   * Prepares the Actions instance
+   * @private
+   */
+  private async initialize() {
+    // Wallet initialization //
+    this.connectWallet()
+
+    // Faucet token initialization //
+    let faucetToken: string | null = localStorage.getItem(
+      defaultFaucetTokenKey
+    );
+    if (faucetToken && faucetToken !== '') {
+      // Faucet token initialized
+      this.faucetToken = faucetToken;
+      try {
+        // Attempt to fund the account
+        await this.fundAccount(this.faucetToken);
+      } catch (e) {
+        
+          console.log('funding error: ', e);
+        
+      }
     }
   }
 
@@ -319,34 +346,64 @@ class Actions {
    ****************/
 
   /**
-   * Starts a new game
-   * @param gameID the ID of the new game
+   * Adds a new task
+   *
+   * @param taskName string - task name
    */
-  async startGame(
-    player: string,
-    gameType: string,
-    boardSize: string,
+  
+  async AddTask(
+    taskName: string,
   ): Promise<any> {
-    // Make the move
-    const startNewGame = await this.callMethod('StartGame', [
-      player,
-      gameType,
-      boardSize
+    const response = await this.callMethod('AddTask', [
+      taskName
     ]);
-    console.log("actions startGame response ", JSON.stringify(startNewGame))
-    return startNewGame;
+    console.log("actions AddTask response ", JSON.stringify(response))
+    return response;
+  }
+
+   /**
+   * Removes a task
+   *
+   * @param taskId string - task id
+   */
+  
+   async RemoveTask(
+    taskId: string,
+  ): Promise<any> {
+    const response = await this.callMethod('RemoveTask', [
+      taskId
+    ]);
+    console.log("actions RemoveTask response ", JSON.stringify(response))
+    return response;
+  }
+
+  /**
+   * Updates a task
+   *
+   * @param taskId string - task id
+   * @param taskBody string - task body
+   */
+  
+  async UpdateTask(
+    taskId: string,
+    taskBody: string,
+  ): Promise<any> {
+    const response = await this.callMethod('EditTask', [
+      taskId,
+      taskBody
+    ]);
+    console.log("actions EditTask response ", JSON.stringify(response))
+    return response;
   }
 
  
   /**
-   * Get both locked and unlocked FLIP balances for a user
-   * @param playerAddr string
+   * Get tasks by realm
    */
-  async GetFLIPBalance(
-    playerAddr: string,
-  ): Promise<any> {
-    const response = await this.evaluateExpression("GetFLIPBalance(\"" + playerAddr + "\")")
-    console.log("actions GetFLIPBalance response ", JSON.stringify(response))
+  
+  async GetTasksByRealm(realmId : string): Promise<any> {
+    const response = await this.evaluateExpression("GetTasksByRealm(\"" + realmId + "\")")
+    console.log("actions GetTasksByRealm response ", JSON.stringify(response))
     return response;
   }
 
