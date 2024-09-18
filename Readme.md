@@ -31,6 +31,6 @@ Subsequent accesses will require only the password to access the dapp.
 
 ### Redux integration
 
-A very simple redux implementation is created under `slices`, `state` and `store`. The provided code should be enough to get you going with your own data storage needs.
+A very simple redux implementation is created under `slices`, `state` and `store`. This allows for app-wide data persistence. The provided code should be enough to get you going with your own data storage needs.
 
 PRs welcome.
