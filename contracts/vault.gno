@@ -64,6 +64,8 @@ func DepositSingle(tokenId uint64, token string, amount string) {
 // Withdraw withdraws tokens from a vault
 // @param tokenId uint64 the vault id
 // @param amount string the amount of liquidity to withdraw
+//
+// panic if the amount is greater than the caller's balance
 func Withdraw(tokenId uint64, amount string) {
 	vault := mustGetVault(tokenId)
 	caller := std.PrevRealm().Addr()
@@ -71,6 +73,9 @@ func Withdraw(tokenId uint64, amount string) {
 	parsedAmount, err := u256.FromDecimal(amount)
 	if err != nil {
 		panic(err)
+	}
+	if balance.Cmp(parsedAmount) < 0 {
+		panic("insufficient balance")
 	}
 
 	liquidityRatio := computeLiquidityRatio(tokenId, parsedAmount)
