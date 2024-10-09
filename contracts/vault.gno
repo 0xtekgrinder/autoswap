@@ -73,7 +73,7 @@ func Withdraw(tokenId uint64, amount string) {
 		panic(err)
 	}
 
-	liquidityRatio := computeLiquidityRatio(tokenId, balance)
+	liquidityRatio := computeLiquidityRatio(tokenId, parsedAmount)
 	_, liquidity, _, _, amount0, amount1, _ := position.DecreaseLiquidity(tokenId, liquidityRatio, u256.NewUint(0).ToString(), u256.NewUint(0).ToString(), time.Now().Unix()+1, false)
 
 	// Transfer tokens to the caller
