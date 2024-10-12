@@ -226,7 +226,7 @@ func Reposition(
 		panic("invalid tick range")
 	}
 
-	// TOODO automaticly compute amount0 and amount1
+	// TODO automaticly compute amount0 and amount1
 	position.Reposition(tokenId, tickLower, tickUpper, _amount0Desired, _amount1Desired, _amount0Min, _amount1Min)
 
 	std.Emit("Reposition", strconv.FormatUint(tokenId, 10), strconv.FormatInt(int64(tickLower), 10), strconv.FormatInt(int64(tickUpper), 10))
