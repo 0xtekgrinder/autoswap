@@ -31,7 +31,7 @@ func init() {
 // @param tokenId uint64 the vault id
 // @param _amount0 string the amount of token0 to deposit
 // @param _amount1 string the amount of token1 to deposit
-func DepositMulti(tokenId uint64, _amount0 string, _amount1 string) {
+func DepositMulti(tokenId uint64, _amount0 string, _amount1 string, _amount0Min string, _amount1Min string, deadline int64) {
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)
 
@@ -46,11 +46,22 @@ func DepositMulti(tokenId uint64, _amount0 string, _amount1 string) {
 	approveByRegisterCall(vault.token0, poolAddr, _amount0)
 	approveByRegisterCall(vault.token1, poolAddr, _amount1)
 
-	_, liquidity, _, _, _ := position.IncreaseLiquidity(tokenId, _amount0, _amount1, _amount0, _amount1, time.Now().Unix()+1)
+	_, liquidity, amount0, amount1, _ := position.IncreaseLiquidity(tokenId, _amount0, _amount1, _amount0Min, _amount1Min, deadline)
 
 	increaseBalance(vault, caller.String(), liquidity)
 
-	std.Emit("Deposit", caller.String(), strconv.FormatUint(tokenId, 10), _amount0, _amount1, liquidity)
+	// Send back any leftover tokens
+	amount0Parsed := subAmounts(_amount0, amount0)
+	amount1Parsed := subAmounts(_amount1, amount1)
+
+	if amount0Parsed.Cmp(u256.NewUint(0)) > 0 {
+		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
+	}
+	if amount1Parsed.Cmp(u256.NewUint(0)) > 0 {
+		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
+	}
+
+	std.Emit("Deposit", caller.String(), strconv.FormatUint(tokenId, 10), amount0Parsed.ToString(), amount1Parsed.ToString(), liquidity)
 }
 
 // DepositSingle deposits a single token into a vault
@@ -117,6 +128,9 @@ func NewVault(
 	tickUpper int32,
 	_amount0 string, // *u256.Uint
 	_amount1 string, // *u256.Uint
+	_amount0Min string, // *u256.Uint
+	_amount1Min string, // *u256.Uint
+	deadline int64,
 ) {
 	caller := std.PrevRealm().Addr()
 	accessControl.HasRole(caller, "admin")
@@ -130,7 +144,7 @@ func NewVault(
 	approveByRegisterCall(token0, poolAddr, _amount0)
 	approveByRegisterCall(token1, poolAddr, _amount1)
 
-	tokenId, liquidity, _, _ := position.Mint(token0, token1, fee, tickLower, tickUpper, _amount0, _amount1, _amount0, _amount1, time.Now().Unix()+1, std.CurrentRealm().Addr().String())
+	tokenId, liquidity, amount0, amount1 := position.Mint(token0, token1, fee, tickLower, tickUpper, _amount0, _amount1, _amount0Min, _amount1Min, deadline, std.CurrentRealm().Addr().String())
 
 	// Create the vault and set the admin's balance
 	vault := &Vault{
@@ -142,8 +156,18 @@ func NewVault(
 		width:    uint32(tickUpper - tickLower),
 	}
 	vault.balances.Set(caller.String(), liquidity)
-
 	vaults.Set(strconv.FormatUint(tokenId, 10), vault)
+
+	// Send back any leftover tokens
+	amount0Parsed := subAmounts(_amount0, amount0)
+	amount1Parsed := subAmounts(_amount1, amount1)
+
+	if amount0Parsed.Cmp(u256.NewUint(0)) > 0 {
+		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
+	}
+	if amount1Parsed.Cmp(u256.NewUint(0)) > 0 {
+		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
+	}
 
 	std.Emit("NewVault", token0, token1, strconv.FormatUint(uint64(fee), 10), strconv.FormatUint(tokenId, 10))
 }
