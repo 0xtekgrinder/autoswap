@@ -57,3 +57,17 @@ func computeLiquidityRatio(tokenId uint64, balance *u256.Uint) uint64 {
 
 	return percentage.Uint64()
 }
+
+func subAmounts(amount0, amount1 string) *u256.Uint {
+	amount0Parsed, err := u256.FromDecimal(amount0)
+	if err != nil {
+		panic(err)
+	}
+	amount1Parsed, err := u256.FromDecimal(amount1)
+	if err != nil {
+		panic(err)
+	}
+
+	amount0Parsed.Sub(amount0Parsed, amount1Parsed)
+	return amount0Parsed
+}

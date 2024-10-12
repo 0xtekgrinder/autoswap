@@ -10,4 +10,5 @@ type Vault struct {
 	token0   string
 	token1   string
 	fee      uint32
+	width    uint32
 }
