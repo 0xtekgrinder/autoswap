@@ -136,6 +136,7 @@ func NewVault(
 		token0:   token0,
 		token1:   token1,
 		fee:      fee,
+		width:    uint32(tickUpper - tickLower),
 	}
 	vault.balances.Set(caller.String(), liquidity)
 
