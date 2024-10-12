@@ -88,8 +88,10 @@ func Withdraw(tokenId uint64, amount string) {
 	std.Emit("Withdraw", caller.String(), strconv.FormatUint(tokenId, 10), amount0, amount1, liquidity)
 }
 
-func Claim(tokenId uint64) {
+func Compound(tokenId uint64) {
 	vault := mustGetVault(tokenId)
+
+	// TODO implement
 }
 
 /**
@@ -170,6 +172,4 @@ func Rebalance(tokenId uint64) {
 
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)
-
-	// TODO rebalance the vault
 }
