@@ -12,11 +12,14 @@ import (
 )
 
 var (
-	vaults        avl.Tree // tokenId -> *Vault
-	accessControl acl.Directory
+	vaults        *avl.Tree // tokenId -> *Vault
+	accessControl *acl.Directory
 )
 
 func init() {
+	vaults = avl.NewTree()
+	accessControl = acl.New()
+
 	accessControl.AddUserPerm(std.PrevRealm().Addr(), "role", "admin")
 }
 
