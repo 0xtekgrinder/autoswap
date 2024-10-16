@@ -8,6 +8,7 @@ import (
 	"gno.land/p/demo/acl"
 	"gno.land/p/demo/avl"
 	"gno.land/p/gnoswap/uint256"
+	"gno.land/r/gnoswap/v2/consts"
 	"gno.land/r/gnoswap/v2/position"
 )
 
@@ -45,7 +46,7 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 	transferFromByRegisterCall(vault.token1, caller, std.CurrentRealm().Addr(), amount1)
 
 	// Approve the pool contract to spend the tokens
-	poolAddr := std.DerivePkgAddr("gno.land/r/gnoswap/v2/pool")
+	poolAddr := consts.POOL_ADDR
 	approveByRegisterCall(vault.token0, poolAddr, amount0)
 	approveByRegisterCall(vault.token1, poolAddr, amount1)
 
@@ -146,7 +147,7 @@ func NewVault(
 	transferFromByRegisterCall(token1, std.PrevRealm().Addr(), std.CurrentRealm().Addr(), amount1)
 
 	// Approve the pool contract to spend the tokens
-	poolAddr := std.DerivePkgAddr("gno.land/r/gnoswap/v2/pool")
+	poolAddr := consts.POOL_ADDR
 	approveByRegisterCall(token0, poolAddr, amount0)
 	approveByRegisterCall(token1, poolAddr, amount1)
 
