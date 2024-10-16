@@ -25,6 +25,11 @@ func GetVaultFee(tokenId uint64) uint32 {
 	return vault.fee
 }
 
+func GetVaultWidth(tokenId uint64) uint32 {
+	vault := mustGetVault(tokenId)
+	return vault.width
+}
+
 func BalanceOf(tokenId uint64, account string) string {
 	vault := mustGetVault(tokenId)
 	balance := mustGetBalance(vault, account)
