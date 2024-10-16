@@ -142,16 +142,7 @@ func NewVault(
 	caller := std.PrevRealm().Addr()
 	accessControl.HasRole(caller, "admin")
 
-	// Pull tokens from the caller
-	transferFromByRegisterCall(token0, std.PrevRealm().Addr(), std.CurrentRealm().Addr(), amount0)
-	transferFromByRegisterCall(token1, std.PrevRealm().Addr(), std.CurrentRealm().Addr(), amount1)
-
-	// Approve the pool contract to spend the tokens
-	poolAddr := consts.POOL_ADDR
-	approveByRegisterCall(token0, poolAddr, amount0)
-	approveByRegisterCall(token1, poolAddr, amount1)
-
-	tokenId, liquidity, amount0Used, amount1Used := position.Mint(token0, token1, fee, tickLower, tickUpper, amount0, amount1, amount0Min, amount1Min, deadline, std.CurrentRealm().Addr().String())
+	tokenId, liquidity, amount0Used, amount1Used := position.Mint(token0, token1, fee, tickLower, tickUpper, amount0, amount1, amount0Min, amount1Min, deadline, std.CurrentRealm().Addr(), caller)
 
 	// Create the vault and set the admin's balance
 	vault := &Vault{
@@ -164,17 +155,6 @@ func NewVault(
 	}
 	vault.balances.Set(caller.String(), liquidity)
 	vaults.Set(strconv.FormatUint(tokenId, 10), vault)
-
-	// Send back any leftover tokens
-	amount0Parsed := subAmounts(amount0, amount0Used)
-	amount1Parsed := subAmounts(amount1, amount1Used)
-
-	if amount0Parsed.Cmp(uint256.NewUint(0)) > 0 {
-		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
-	}
-	if amount1Parsed.Cmp(uint256.NewUint(0)) > 0 {
-		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
-	}
 
 	std.Emit("NewVault", token0, token1, strconv.FormatUint(uint64(fee), 10), strconv.FormatUint(tokenId, 10))
 }
