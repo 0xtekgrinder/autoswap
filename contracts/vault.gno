@@ -181,7 +181,8 @@ func AddKeeper(keeper std.Address) {
 func RemoveKeeper(keeper std.Address) {
 	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
-	accessControl.RemoveUserPerm(keeper, "role", "keeper")
+	// Awaiting the implementation of RemoveUserPerm in the ACL
+	// accessControl.RemoveUserPerm(keeper, "role", "keeper")
 }
 
 /**
