@@ -2,6 +2,7 @@ package gnoswap_optimizer
 
 import (
 	"strconv"
+	"fmt"
 
 	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/position"

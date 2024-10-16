@@ -141,7 +141,7 @@ func handleNative(pkgPath string) string {
 
 func checkAmountRange(amount string) uint64 {
 	// check amount is in uint64 range
-	amountParsed, err := u256.FromDecimal(amount)
+	amountParsed, err := uint256.FromDecimal(amount)
 	if err != nil {
 		panic(fmt.Sprintf("amount(%s) is not in uint64 range", amount))
 	}
