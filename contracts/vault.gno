@@ -176,6 +176,14 @@ func AddKeeper(keeper std.Address) {
 	accessControl.AddUserPerm(keeper, "role", "keeper")
 }
 
+// RemoveKeeper removes a keeper
+// @param keeper Address the address of the keeper
+func RemoveKeeper(keeper std.Address) {
+	mustHaveRole(std.PrevRealm().Addr(), "admin")
+
+	accessControl.RemoveUserPerm(keeper, "role", "keeper")
+}
+
 /**
  * KEEPER FUNCTIONS
  */
