@@ -23,6 +23,14 @@ func mustGetVault(tokenId uint64) *Vault {
 	return vault.(*Vault)
 }
 
+func mustGetRegistered(pkgPath string) GRC20Interface {
+	igrc20, exists := registered.Get(pkgPath)
+	if !exists {
+		panic(fmt.Sprintf("GRC20 interface for package %s not found", pkgPath))
+	}
+	return igrc20.(GRC20Interface)
+}
+
 func mustGetBalance(vault *Vault, account string) *uint256.Uint {
 	balance, exists := vault.balances.Get(account)
 	if !exists {
