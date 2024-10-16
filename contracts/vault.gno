@@ -7,7 +7,7 @@ import (
 
 	"gno.land/p/demo/acl"
 	"gno.land/p/demo/avl"
-	u256 "gno.land/p/gnoswap/uint256"
+	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/position"
 )
 
@@ -57,10 +57,10 @@ func DepositMulti(tokenId uint64, _amount0 string, _amount1 string, _amount0Min 
 	amount0Parsed := subAmounts(_amount0, amount0)
 	amount1Parsed := subAmounts(_amount1, amount1)
 
-	if amount0Parsed.Cmp(u256.NewUint(0)) > 0 {
+	if amount0Parsed.Cmp(uint256.NewUint(0)) > 0 {
 		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
 	}
-	if amount1Parsed.Cmp(u256.NewUint(0)) > 0 {
+	if amount1Parsed.Cmp(uint256.NewUint(0)) > 0 {
 		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
 	}
 
@@ -87,7 +87,7 @@ func Withdraw(tokenId uint64, amount string) {
 	vault := mustGetVault(tokenId)
 	caller := std.PrevRealm().Addr()
 	balance := mustGetBalance(vault, caller.String())
-	parsedAmount, err := u256.FromDecimal(amount)
+	parsedAmount, err := uint256.FromDecimal(amount)
 	if err != nil {
 		panic(err)
 	}
@@ -96,7 +96,7 @@ func Withdraw(tokenId uint64, amount string) {
 	}
 
 	liquidityRatio := computeLiquidityRatio(tokenId, parsedAmount)
-	_, liquidity, _, _, amount0, amount1, _ := position.DecreaseLiquidity(tokenId, liquidityRatio, u256.NewUint(0).ToString(), u256.NewUint(0).ToString(), time.Now().Unix()+1, false)
+	_, liquidity, _, _, amount0, amount1, _ := position.DecreaseLiquidity(tokenId, liquidityRatio, uint256.NewUint(0).ToString(), uint256.NewUint(0).ToString(), time.Now().Unix()+1, false)
 
 	// Transfer tokens to the caller
 	transferByRegisterCall(vault.token0, caller, amount0)
@@ -132,10 +132,10 @@ func NewVault(
 	fee uint32,
 	tickLower int32,
 	tickUpper int32,
-	_amount0 string, // *u256.Uint
-	_amount1 string, // *u256.Uint
-	_amount0Min string, // *u256.Uint
-	_amount1Min string, // *u256.Uint
+	_amount0 string, // *uint256.Uint
+	_amount1 string, // *uint256.Uint
+	_amount0Min string, // *uint256.Uint
+	_amount1Min string, // *uint256.Uint
 	deadline int64,
 ) {
 	caller := std.PrevRealm().Addr()
@@ -168,10 +168,10 @@ func NewVault(
 	amount0Parsed := subAmounts(_amount0, amount0)
 	amount1Parsed := subAmounts(_amount1, amount1)
 
-	if amount0Parsed.Cmp(u256.NewUint(0)) > 0 {
+	if amount0Parsed.Cmp(uint256.NewUint(0)) > 0 {
 		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
 	}
-	if amount1Parsed.Cmp(u256.NewUint(0)) > 0 {
+	if amount1Parsed.Cmp(uint256.NewUint(0)) > 0 {
 		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
 	}
 
@@ -213,8 +213,8 @@ func Reposition(
 	tickUpper int32,
 	_amount0Desired string, // uint256
 	_amount1Desired string, // uint256
-	_amount0Min string, // *u256.Uint
-	_amount1Min string, // *u256.Uint
+	_amount0Min string, // *uint256.Uint
+	_amount1Min string, // *uint256.Uint
 ) {
 	accessControl.HasRole(std.PrevRealm().Addr(), "keeper")
 

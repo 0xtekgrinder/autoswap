@@ -5,7 +5,7 @@ import (
 	"std"
 
 	pusers "gno.land/p/demo/users"
-	u256 "gno.land/p/gnoswap/uint256"
+	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/consts"
 )
 
@@ -26,6 +26,7 @@ func GetRegisteredTokens() []string {
 	for k := range registered {
 		tokens = append(tokens, k)
 	}
+
 	return tokens
 }
 
