@@ -140,7 +140,7 @@ func NewVault(
 	deadline int64,
 ) {
 	caller := std.PrevRealm().Addr()
-	accessControl.HasRole(caller, "admin")
+	mustHaveRole(caller, "admin")
 
 	tokenId, liquidity, amount0Used, amount1Used := position.Mint(token0, token1, fee, tickLower, tickUpper, amount0, amount1, amount0Min, amount1Min, deadline, std.CurrentRealm().Addr(), caller)
 
@@ -171,7 +171,7 @@ func TogglePause(tokenId uint64) {
 // AddKeeper adds a keeper that can rebalance vaults
 // @param keeper Address the address of the keeper
 func AddKeeper(keeper std.Address) {
-	accessControl.HasRole(std.PrevRealm().Addr(), "admin")
+	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
 	accessControl.AddUserPerm(keeper, "role", "keeper")
 }
@@ -197,7 +197,7 @@ func Reposition(
 	amount0Min string, // *uint256.Uint
 	amount1Min string, // *uint256.Uint
 ) {
-	accessControl.HasRole(std.PrevRealm().Addr(), "keeper")
+	mustHaveRole(std.PrevRealm().Addr(), "keeper")
 
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)

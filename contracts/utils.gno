@@ -3,6 +3,7 @@ package gnoswap_optimizer
 import (
 	"strconv"
 	"fmt"
+	"std"
 
 	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/position"
@@ -70,4 +71,10 @@ func subAmounts(amount0, amount1 string) *uint256.Uint {
 
 	amount0Parsed.Sub(amount0Parsed, amount1Parsed)
 	return amount0Parsed
+}
+
+func mustHaveRole(account std.Address, role string) {
+	if !accessControl.HasRole(std.PrevRealm().Addr(), role) {
+		panic(fmt.Sprintf("Account %s does not have role %s", account.String(), role))
+	}
 }
