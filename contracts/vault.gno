@@ -9,7 +9,7 @@ import (
 	"gno.land/p/demo/avl"
 	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/consts"
-	"gno.land/r/gnoswap/v2/position"
+	pn "gno.land/r/gnoswap/v2/position"
 )
 
 var (
@@ -50,7 +50,7 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 	approveByRegisterCall(vault.token0, poolAddr, amount0)
 	approveByRegisterCall(vault.token1, poolAddr, amount1)
 
-	_, liquidity, amount0Used, amount1Used, _ := position.IncreaseLiquidity(tokenId, amount0, amount1, amount0Min, amount1Min, deadline)
+	_, liquidity, amount0Used, amount1Used, _ := pn.IncreaseLiquidity(tokenId, amount0, amount1, amount0Min, amount1Min, deadline)
 
 	increaseBalance(vault, caller.String(), liquidity)
 
@@ -97,7 +97,7 @@ func Withdraw(tokenId uint64, amount string) {
 	}
 
 	liquidityRatio := computeLiquidityRatio(tokenId, parsedAmount)
-	_, liquidity, _, _, amount0, amount1, _ := position.DecreaseLiquidity(tokenId, liquidityRatio, uint256.NewUint(0).ToString(), uint256.NewUint(0).ToString(), time.Now().Unix()+1, false)
+	_, liquidity, _, _, amount0, amount1, _ := pn.DecreaseLiquidity(tokenId, liquidityRatio, uint256.NewUint(0).ToString(), uint256.NewUint(0).ToString(), time.Now().Unix()+1, false)
 
 	// Transfer tokens to the caller
 	transferByRegisterCall(vault.token0, caller, amount0)
@@ -142,7 +142,7 @@ func NewVault(
 	caller := std.PrevRealm().Addr()
 	mustHaveRole(caller, "admin")
 
-	tokenId, liquidity, amount0Used, amount1Used := position.Mint(token0, token1, fee, tickLower, tickUpper, amount0, amount1, amount0Min, amount1Min, deadline, std.CurrentRealm().Addr(), caller)
+	tokenId, liquidity, amount0Used, amount1Used := pn.Mint(token0, token1, fee, tickLower, tickUpper, amount0, amount1, amount0Min, amount1Min, deadline, std.CurrentRealm().Addr(), caller)
 
 	// Create the vault and set the admin's balance
 	vault := &Vault{
@@ -189,7 +189,7 @@ func RemoveKeeper(keeper std.Address) {
  * KEEPER FUNCTIONS
  */
 
-// Reposition reposition a vault into a new tick range
+// Repn repn a vault into a new tick range
 // @param tokenId uint64 the vault id
 // @param tickLower int32 the lower tick of the pool
 // @param tickUpper int32 the upper tick of the pool
@@ -197,7 +197,7 @@ func RemoveKeeper(keeper std.Address) {
 // @param amount1Desired string the amount of token1 to deposit
 // @param amount0Min string the minimum amount of token0 to deposit
 // @param amount1Min string the minimum amount of token1 to deposit
-func Reposition(
+func Repn(
 	tokenId uint64,
 	tickLower int32,
 	tickUpper int32,
@@ -217,7 +217,7 @@ func Reposition(
 	}
 
 	// TODO automaticly compute amount0 and amount1
-	position.Reposition(tokenId, tickLower, tickUpper, amount0Desired, amount1Desired, amount0Min, amount1Min)
+	pn.Reposition(tokenId, tickLower, tickUpper, amount0Desired, amount1Desired, amount0Min, amount1Min)
 
 	std.Emit("Reposition", strconv.FormatUint(tokenId, 10), strconv.FormatInt(int64(tickLower), 10), strconv.FormatInt(int64(tickUpper), 10))
 }

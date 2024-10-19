@@ -6,7 +6,7 @@ import (
 
 	"gno.land/p/demo/ufmt"
 	"gno.land/p/gnoswap/uint256"
-	"gno.land/r/gnoswap/v2/position"
+	pn "gno.land/r/gnoswap/v2/position"
 )
 
 func assertVaultPaused(vault *Vault) {
@@ -56,7 +56,7 @@ func increaseBalance(vault *Vault, account string, amount string) {
 
 // get a percentage of the total liquidity as an uint64
 func computeLiquidityRatio(tokenId uint64, balance *uint256.Uint) uint64 {
-	totalLiquidity := position.PositionGetPositionLiquidity(tokenId)
+	totalLiquidity := pn.PositionGetPositionLiquidity(tokenId)
 
 	// get a percentage of the total liquidity as an uint64
 	percentage := new(uint256.Uint)
