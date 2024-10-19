@@ -63,7 +63,7 @@ func computeLiquidityRatio(tokenId uint64, balance *uint256.Uint) uint64 {
 	// get a percentage of the total liquidity as an uint64
 	percentage := uint256.Zero()
 	percentage.Set(balance)
-	percentage.Mul(percentage, uint256.NewUint(100))
+	percentage.MulOverflow(percentage, uint256.NewUint(100))
 	percentage.Div(percentage, uint256.MustFromDecimal(totalLiquidity.ToString()))
 
 	return percentage.Uint64()
