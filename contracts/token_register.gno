@@ -5,7 +5,7 @@ import (
 	
 	"gno.land/p/demo/ufmt"
 	pusers "gno.land/p/demo/users"
-	"gno.land/p/gnoswap/uint256"
+	"gno.land/p/demo/uint256"
 	"gno.land/r/gnoswap/v2/consts"
 	"gno.land/p/demo/avl"
 )
@@ -121,10 +121,7 @@ func handleNative(pkgPath string) string {
 
 func checkAmountRange(amount string) uint64 {
 	// check amount is in uint64 range
-	amountParsed, err := uint256.FromDecimal(amount)
-	if err != nil {
-		panic(ufmt.Sprintf("amount(%s) is not in uint64 range", amount))
-	}
+	amountParsed := uint256.MustFromDecimal(amount)
 
 	return amountParsed.Uint64()
 }

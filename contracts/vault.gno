@@ -7,7 +7,7 @@ import (
 
 	"gno.land/p/demo/acl"
 	"gno.land/p/demo/avl"
-	"gno.land/p/gnoswap/uint256"
+	"gno.land/p/demo/uint256"
 	"gno.land/r/gnoswap/v2/consts"
 	pn "gno.land/r/gnoswap/v2/position"
 )
@@ -88,10 +88,8 @@ func Withdraw(tokenId uint64, amount string) {
 	vault := mustGetVault(tokenId)
 	caller := std.PrevRealm().Addr()
 	balance := mustGetBalance(vault, caller.String())
-	parsedAmount, err := uint256.FromDecimal(amount)
-	if err != nil {
-		panic(err)
-	}
+	parsedAmount := uint256.MustFromDecimal(amount)
+
 	if balance.Cmp(parsedAmount) < 0 {
 		panic("insufficient balance")
 	}
