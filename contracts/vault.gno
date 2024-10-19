@@ -29,12 +29,12 @@ func init() {
  */
 
 // DepositMulti deposits tokens into a vault
-// @param tokenId uint64 the vault id
-// @param amount0 string the amount of token0 to deposit
-// @param amount1 string the amount of token1 to deposit
-// @param amount0Min string the minimum amount of token0 to deposit
-// @param amount1Min string the minimum amount of token1 to deposit
-// @param deadline int64 the deadline for the transaction
+// tokenId uint64 the vault id
+// amount0 string the amount of token0 to deposit
+// amount1 string the amount of token1 to deposit
+// amount0Min string the minimum amount of token0 to deposit
+// amount1Min string the minimum amount of token1 to deposit
+// deadline int64 the deadline for the transaction
 func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min string, amount1Min string, deadline int64) {
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)
@@ -69,9 +69,9 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 }
 
 // DepositSingle deposits a single token into a vault
-// @param tokenId uint64 the vault id
-// @param token string the token to deposit
-// @param amount string the amount of token to deposit
+// tokenId uint64 the vault id
+// token string the token to deposit
+// amount string the amount of token to deposit
 func DepositSingle(tokenId uint64, token string, amount string) {
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)
@@ -80,8 +80,8 @@ func DepositSingle(tokenId uint64, token string, amount string) {
 }
 
 // Withdraw withdraws tokens from a vault
-// @param tokenId uint64 the vault id
-// @param amount string the amount of liquidity to withdraw
+// tokenId uint64 the vault id
+// amount string the amount of liquidity to withdraw
 //
 // panic if the amount is greater than the caller's balance
 func Withdraw(tokenId uint64, amount string) {
@@ -117,16 +117,16 @@ func Compound(tokenId uint64) {
  */
 
 // NewVault creates a new vault
-// @param token0 string the address of the first token
-// @param token1 string the address of the second token
-// @param fee uint32 the fee of the pool
-// @param tickLower int32 the lower tick of the pool
-// @param tickUpper int32 the upper tick of the pool
-// @param amount0 string the amount of token0 to deposit
-// @param amount1 string the amount of token1 to deposit
-// @param amount0Min string the minimum amount of token0 to deposit
-// @param amount1Min string the minimum amount of token1 to deposit
-// @param deadline int64 the deadline for the transaction
+// token0 string the address of the first token
+// token1 string the address of the second token
+// fee uint32 the fee of the pool
+// tickLower int32 the lower tick of the pool
+// tickUpper int32 the upper tick of the pool
+// amount0 string the amount of token0 to deposit
+// amount1 string the amount of token1 to deposit
+// amount0Min string the minimum amount of token0 to deposit
+// amount1Min string the minimum amount of token1 to deposit
+// deadline int64 the deadline for the transaction
 func NewVault(
 	token0 string,
 	token1 string,
@@ -160,7 +160,7 @@ func NewVault(
 }
 
 // TogglePause pause deposits for a vault
-// @param tokenId uint64 the vault id
+// tokenId uint64 the vault id
 func TogglePause(tokenId uint64) {
 	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
@@ -169,7 +169,7 @@ func TogglePause(tokenId uint64) {
 }
 
 // AddKeeper adds a keeper that can rebalance vaults
-// @param keeper Address the address of the keeper
+// keeper Address the address of the keeper
 func AddKeeper(keeper std.Address) {
 	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
@@ -177,7 +177,7 @@ func AddKeeper(keeper std.Address) {
 }
 
 // RemoveKeeper removes a keeper
-// @param keeper Address the address of the keeper
+// keeper Address the address of the keeper
 func RemoveKeeper(keeper std.Address) {
 	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
@@ -190,13 +190,13 @@ func RemoveKeeper(keeper std.Address) {
  */
 
 // Repn repn a vault into a new tick range
-// @param tokenId uint64 the vault id
-// @param tickLower int32 the lower tick of the pool
-// @param tickUpper int32 the upper tick of the pool
-// @param amount0Desired string the amount of token0 to deposit
-// @param amount1Desired string the amount of token1 to deposit
-// @param amount0Min string the minimum amount of token0 to deposit
-// @param amount1Min string the minimum amount of token1 to deposit
+// tokenId uint64 the vault id
+// tickLower int32 the lower tick of the pool
+// tickUpper int32 the upper tick of the pool
+// amount0Desired string the amount of token0 to deposit
+// amount1Desired string the amount of token1 to deposit
+// amount0Min string the minimum amount of token0 to deposit
+// amount1Min string the minimum amount of token1 to deposit
 func Repn(
 	tokenId uint64,
 	tickLower int32,
