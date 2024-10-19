@@ -58,10 +58,10 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 	amount0Parsed := subAmounts(amount0, amount0Used)
 	amount1Parsed := subAmounts(amount1, amount1Used)
 
-	if amount0Parsed.Cmp(uint256.NewUint(0)) > 0 {
+	if amount0Parsed.Gt(uint256.Zero()) {
 		transferByRegisterCall(vault.token0, caller, amount0Parsed.ToString())
 	}
-	if amount1Parsed.Cmp(uint256.NewUint(0)) > 0 {
+	if amount1Parsed.Gt(uint256.Zero()) {
 		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
 	}
 
@@ -90,7 +90,7 @@ func Withdraw(tokenId uint64, amount string) {
 	balance := mustGetBalance(vault, caller.String())
 	parsedAmount := uint256.MustFromDecimal(amount)
 
-	if balance.Cmp(parsedAmount) < 0 {
+	if balance.Lt(parsedAmount) {
 		panic("insufficient balance")
 	}
 
