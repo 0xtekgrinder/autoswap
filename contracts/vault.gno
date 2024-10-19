@@ -162,7 +162,7 @@ func NewVault(
 // TogglePause pause deposits for a vault
 // @param tokenId uint64 the vault id
 func TogglePause(tokenId uint64) {
-	accessControl.HasRole(std.PrevRealm().Addr(), "admin")
+	mustHaveRole(std.PrevRealm().Addr(), "admin")
 
 	vault := mustGetVault(tokenId)
 	vault.paused = !vault.paused
