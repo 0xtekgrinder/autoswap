@@ -99,6 +99,8 @@ func Withdraw(tokenId uint64, amount string) {
 	liquidityRatio := computeLiquidityRatio(tokenId, parsedAmount)
 	_, liquidity, _, _, amount0, amount1, _ := pn.DecreaseLiquidity(tokenId, liquidityRatio, uint256.NewUint(0).ToString(), uint256.NewUint(0).ToString(), time.Now().Unix()+1, false)
 
+	decreaseBalance(vault, caller.String(), liquidity)
+
 	// Transfer tokens to the caller
 	transferByRegisterCall(vault.token0, caller, amount0)
 	transferByRegisterCall(vault.token1, caller, amount1)

@@ -54,6 +54,17 @@ func increaseBalance(vault *Vault, account string, amount string) {
 	vault.balances.Set(account, currentBalance.ToString())
 }
 
+func decreaseBalance(vault *Vault, account string, amount string) {
+	parsedAmount, err := uint256.FromDecimal(amount)
+	if err != nil {
+		panic(err)
+	}
+
+	currentBalance := mustGetBalance(vault, account)
+	currentBalance.Sub(currentBalance, parsedAmount)
+	vault.balances.Set(account, currentBalance.ToString())
+}
+
 // get a percentage of the total liquidity as an uint64
 func computeLiquidityRatio(tokenId uint64, balance *uint256.Uint) uint64 {
 	totalLiquidity := pn.PositionGetPositionLiquidity(tokenId)
