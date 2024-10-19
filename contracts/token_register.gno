@@ -1,9 +1,9 @@
 package gnoswap_optimizer
 
 import (
-	"fmt"
 	"std"
-
+	
+	"gno.land/p/demo/ufmt"
 	pusers "gno.land/p/demo/users"
 	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/consts"
@@ -34,7 +34,7 @@ func RegisterGRC20Interface(pkgPath string, igrc20 GRC20Interface) {
 
 	_, found := registered.Get(pkgPath)
 	if found {
-		panic(fmt.Sprintf("pkgPath(%s) already registered", pkgPath))
+		panic(ufmt.Sprintf("pkgPath(%s) already registered", pkgPath))
 	}
 
 	registered.Set(pkgPath, igrc20)
@@ -48,7 +48,7 @@ func UnregisterGRC20Interface(pkgPath string) {
 
 	_, found := registered.Get(pkgPath)
 	if !found {
-		panic(fmt.Sprintf("pkgPath(%s) not registered", pkgPath))
+		panic(ufmt.Sprintf("pkgPath(%s) not registered", pkgPath))
 	}
 	registered.Remove(pkgPath)
 }
@@ -123,7 +123,7 @@ func checkAmountRange(amount string) uint64 {
 	// check amount is in uint64 range
 	amountParsed, err := uint256.FromDecimal(amount)
 	if err != nil {
-		panic(fmt.Sprintf("amount(%s) is not in uint64 range", amount))
+		panic(ufmt.Sprintf("amount(%s) is not in uint64 range", amount))
 	}
 
 	return amountParsed.Uint64()

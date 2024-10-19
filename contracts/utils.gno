@@ -2,9 +2,9 @@ package gnoswap_optimizer
 
 import (
 	"strconv"
-	"fmt"
 	"std"
 
+	"gno.land/p/demo/ufmt"
 	"gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/position"
 )
@@ -18,7 +18,7 @@ func assertVaultPaused(vault *Vault) {
 func mustGetVault(tokenId uint64) *Vault {
 	vault, exists := vaults.Get(strconv.FormatUint(tokenId, 10))
 	if !exists {
-		panic(fmt.Sprintf("Vault %d not found", tokenId))
+		panic(ufmt.Sprintf("Vault %d not found", tokenId))
 	}
 	return vault.(*Vault)
 }
@@ -26,7 +26,7 @@ func mustGetVault(tokenId uint64) *Vault {
 func mustGetRegistered(pkgPath string) GRC20Interface {
 	igrc20, exists := registered.Get(pkgPath)
 	if !exists {
-		panic(fmt.Sprintf("GRC20 interface for package %s not found", pkgPath))
+		panic(ufmt.Sprintf("GRC20 interface for package %s not found", pkgPath))
 	}
 	return igrc20.(GRC20Interface)
 }
@@ -34,7 +34,7 @@ func mustGetRegistered(pkgPath string) GRC20Interface {
 func mustGetBalance(vault *Vault, account string) *uint256.Uint {
 	balance, exists := vault.balances.Get(account)
 	if !exists {
-		panic(fmt.Sprintf("Balance for account %s not found", account))
+		panic(ufmt.Sprintf("Balance for account %s not found", account))
 	}
 	parsedAmount, err := uint256.FromDecimal(balance.(string))
 	if err != nil {
@@ -83,6 +83,6 @@ func subAmounts(amount0, amount1 string) *uint256.Uint {
 
 func mustHaveRole(account std.Address, role string) {
 	if !accessControl.HasRole(std.PrevRealm().Addr(), role) {
-		panic(fmt.Sprintf("Account %s does not have role %s", account.String(), role))
+		panic(ufmt.Sprintf("Account %s does not have role %s", account.String(), role))
 	}
 }
