@@ -65,7 +65,7 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 		transferByRegisterCall(vault.token1, caller, amount1Parsed.ToString())
 	}
 
-	std.Emit("Deposit", caller.String(), strconv.FormatUint(tokenId, 10), amount0Parsed.ToString(), amount1Parsed.ToString(), liquidity)
+	std.Emit("Deposit", "caller", caller.String(), "tokenId", strconv.FormatUint(tokenId, 10), "amount0Used", amount0Used, "amount1Used", amount1Used, "balanceAdded", liquidity)
 }
 
 // DepositSingle deposits a single token into a vault
@@ -103,7 +103,7 @@ func Withdraw(tokenId uint64, amount string) {
 	transferByRegisterCall(vault.token0, caller, amount0)
 	transferByRegisterCall(vault.token1, caller, amount1)
 
-	std.Emit("Withdraw", caller.String(), strconv.FormatUint(tokenId, 10), amount0, amount1, liquidity)
+	std.Emit("Withdraw", "caller", caller.String(), "tokenId", strconv.FormatUint(tokenId, 10), "amount0Withdrawn", amount0, "amount1Withdrawn", amount1, "balanceRemoved", liquidity)
 }
 
 func Compound(tokenId uint64) {
@@ -156,7 +156,7 @@ func NewVault(
 	vault.balances.Set(caller.String(), liquidity)
 	vaults.Set(strconv.FormatUint(tokenId, 10), vault)
 
-	std.Emit("NewVault", token0, token1, strconv.FormatUint(uint64(fee), 10), strconv.FormatUint(tokenId, 10))
+	std.Emit("NewVault", "tokenId", strconv.FormatUint(tokenId, 10), "token0", token0, "token1", token1, "fee", strconv.FormatUint(uint64(fee), 10), "tickLower", strconv.FormatInt(int64(tickLower), 10), "tickUpper", strconv.FormatInt(int64(tickUpper), 10))
 }
 
 // TogglePause pause deposits for a vault
@@ -219,5 +219,5 @@ func Repn(
 	// TODO automaticly compute amount0 and amount1
 	pn.Reposition(tokenId, tickLower, tickUpper, amount0Desired, amount1Desired, amount0Min, amount1Min)
 
-	std.Emit("Reposition", strconv.FormatUint(tokenId, 10), strconv.FormatInt(int64(tickLower), 10), strconv.FormatInt(int64(tickUpper), 10))
+	std.Emit("Reposition", "tokenId", strconv.FormatUint(tokenId, 10), "tickLower", strconv.FormatInt(int64(tickLower), 10), "tickUpper", strconv.FormatInt(int64(tickUpper), 10))
 }
