@@ -1,4 +1,4 @@
-package gnoswap_optimizer
+package autoswap
 
 func GetVault(tokenId uint64) Vault {
 	vault := mustGetVault(tokenId)

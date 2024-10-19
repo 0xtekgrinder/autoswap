@@ -1,4 +1,4 @@
-module gno.land/r/gnoswap_optimizer
+module gno.land/r/0xtekgrinder/autoswap
 
 require (
 	gno.land/p/demo/acl v0.0.0-latest

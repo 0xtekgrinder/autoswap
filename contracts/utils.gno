@@ -1,4 +1,4 @@
-package gnoswap_optimizer
+package autoswap
 
 import (
 	"strconv"
