@@ -6,7 +6,17 @@ import (
 
 	"gno.land/p/demo/ufmt"
 	"gno.land/p/demo/uint256"
+	"gno.land/p/demo/testutils"
+	"gno.land/r/gnoswap/v2/consts"
 	pn "gno.land/r/gnoswap/v2/position"
+)
+
+var (
+	fresh01      = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
+	fresh02      = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
+	fresh01Realm = std.NewUserRealm(fresh01)
+	fresh02Realm = std.NewUserRealm(fresh02)
+	adminRealm   = std.NewUserRealm(consts.ADMIN)
 )
 
 func assertVaultPaused(vault *Vault) {

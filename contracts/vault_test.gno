@@ -12,13 +12,6 @@ import (
 	"gno.land/r/gnoswap/v2/gns"
 )
 
-// fresh users
-var (
-	fresh01    = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
-	fresh02    = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
-	adminRealm = std.NewUserRealm(consts.ADMIN)
-)
-
 func TestCreateVaultAsAdmin(t *testing.T) {
 	initTokenRegistries()
 	initPool()
@@ -41,7 +34,7 @@ func TestCreateVaultAsAdmin(t *testing.T) {
 }
 
 func TestAddKeeperNotAdmin(t *testing.T) {
-	std.TestSetRealm(adminRealm)
+	std.TestSetRealm(fresh02Realm)
 
 	shouldPanic(t, func() {
 		AddKeeper(fresh02)
@@ -60,7 +53,7 @@ func TestAddKeeperAsAdmin(t *testing.T) {
 // }
 //
 // func TestRemoveKeeperNotAdmin(t *testing.T) {
-// 	std.TestSetRealm(adminRealm)
+// 	std.TestSetRealm(fresh02Realm)
 //
 // 	shouldPanic(t, func() {
 // 		RemoveKeeper(fresh02)

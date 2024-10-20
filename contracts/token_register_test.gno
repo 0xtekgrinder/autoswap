@@ -8,7 +8,7 @@ import (
 )
 
 func TestRegisterGRC20InterfaceNotAsAdmin(t *testing.T) {
-	std.TestSetRealm(std.NewUserRealm(consts.ADMIN))
+	std.TestSetRealm(fresh02Realm)
 
 	shouldPanic(t, func() {
 		RegisterGRC20Interface("pkgPath", GNSToken{})
@@ -31,7 +31,7 @@ func TestRegisterGRC20InterfaceAlreadyRegistered(t *testing.T) {
 }
 
 func TestUnregisterGRC20InterfaceNotAsAdmin(t *testing.T) {
-	std.TestSetRealm(std.NewUserRealm(consts.ADMIN))
+	std.TestSetRealm(fresh02Realm)
 
 	shouldPanic(t, func() {
 		UnregisterGRC20Interface("pkgPath")
