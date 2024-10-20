@@ -1,8 +1,8 @@
 package autoswap
 
 import (
-	"strconv"
 	"std"
+	"strconv"
 
 	"gno.land/p/demo/ufmt"
 	"gno.land/p/demo/uint256"

@@ -3,18 +3,14 @@ package autoswap
 import (
 	"std"
 	"testing"
-	"fmt"
 
-	"gno.land/p/demo/testutils"
 	pusers "gno.land/p/demo/users"
-
 
 	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
 
 	"gno.land/r/demo/wugnot"
 	"gno.land/r/gnoswap/v2/gns"
-	"gno.land/r/gnoswap/v2/position"
 
 	pl "gno.land/r/gnoswap/v2/pool"
 )
@@ -24,7 +20,6 @@ func initPool() {
 	pl.SetPoolCreationFeeByAdmin(0)
 	pl.CreatePool(consts.GNOT, consts.GNS_PATH, 500, common.TickMathGetSqrtRatioAtTick(-10000).ToString())
 }
-
 
 type WugnotToken struct{}
 

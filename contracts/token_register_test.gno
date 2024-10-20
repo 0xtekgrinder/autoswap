@@ -3,20 +3,8 @@ package autoswap
 import (
 	"std"
 	"testing"
-	"fmt"
 
-	"gno.land/p/demo/testutils"
-	pusers "gno.land/p/demo/users"
-
-
-	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
-
-	"gno.land/r/demo/wugnot"
-	"gno.land/r/gnoswap/v2/gns"
-	"gno.land/r/gnoswap/v2/position"
-
-	pl "gno.land/r/gnoswap/v2/pool"
 )
 
 func TestRegisterGRC20InterfaceNotAsAdmin(t *testing.T) {
@@ -57,7 +45,6 @@ func TestUnregisterGRC20Interface(t *testing.T) {
 
 	shouldEQ(t, found, false)
 }
-
 
 func TestUnregisterGRC20InterfaceNotRegistered(t *testing.T) {
 	shouldPanic(t, func() {

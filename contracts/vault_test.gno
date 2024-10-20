@@ -3,26 +3,19 @@ package autoswap
 import (
 	"std"
 	"testing"
-	"fmt"
 
 	"gno.land/p/demo/testutils"
-	pusers "gno.land/p/demo/users"
 
-
-	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
 
 	"gno.land/r/demo/wugnot"
 	"gno.land/r/gnoswap/v2/gns"
-	"gno.land/r/gnoswap/v2/position"
-
-	pl "gno.land/r/gnoswap/v2/pool"
 )
 
 // fresh users
 var (
-	fresh01 = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
-	fresh02 = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
+	fresh01    = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
+	fresh02    = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
 	adminRealm = std.NewUserRealm(consts.ADMIN)
 )
 
@@ -62,14 +55,13 @@ func TestAddKeeperAsAdmin(t *testing.T) {
 	shouldEQ(t, hasRole, true)
 }
 
-
 // func TestRemoveKeeperAsAdmin(t *testing.T) {
 // 	RemoveKeeper(fresh02)
 // }
-// 
+//
 // func TestRemoveKeeperNotAdmin(t *testing.T) {
 // 	std.TestSetRealm(adminRealm)
-// 
+//
 // 	shouldPanic(t, func() {
 // 		RemoveKeeper(fresh02)
 // 	})

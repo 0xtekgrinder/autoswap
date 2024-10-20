@@ -2,12 +2,12 @@ package autoswap
 
 import (
 	"std"
-	
-	"gno.land/p/demo/ufmt"
-	pusers "gno.land/p/demo/users"
-	"gno.land/p/demo/uint256"
-	"gno.land/r/gnoswap/v2/consts"
+
 	"gno.land/p/demo/avl"
+	"gno.land/p/demo/ufmt"
+	"gno.land/p/demo/uint256"
+	pusers "gno.land/p/demo/users"
+	"gno.land/r/gnoswap/v2/consts"
 )
 
 type GRC20Interface interface {
@@ -18,8 +18,8 @@ type GRC20Interface interface {
 }
 
 var (
-	registered  *avl.Tree // pkgPath -> GRC20Interface
-	locked      bool 	// prevent reentrancy
+	registered *avl.Tree // pkgPath -> GRC20Interface
+	locked     bool      // prevent reentrancy
 )
 
 func init() {
