@@ -6,13 +6,20 @@ import (
 
 	pusers "gno.land/p/demo/users"
 
+	"gno.land/p/demo/testutils"
+	"gno.land/r/demo/wugnot"
 	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
-
-	"gno.land/r/demo/wugnot"
 	"gno.land/r/gnoswap/v2/gns"
-
 	pl "gno.land/r/gnoswap/v2/pool"
+)
+
+var (
+	fresh01      = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
+	fresh02      = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
+	fresh01Realm = std.NewUserRealm(fresh01)
+	fresh02Realm = std.NewUserRealm(fresh02)
+	adminRealm   = std.NewUserRealm(consts.ADMIN)
 )
 
 func initPool() {
@@ -26,12 +33,15 @@ type WugnotToken struct{}
 func (WugnotToken) Transfer() func(to pusers.AddressOrName, amount uint64) {
 	return wugnot.Transfer
 }
+
 func (WugnotToken) TransferFrom() func(from, to pusers.AddressOrName, amount uint64) {
 	return wugnot.TransferFrom
 }
+
 func (WugnotToken) BalanceOf() func(owner pusers.AddressOrName) uint64 {
 	return wugnot.BalanceOf
 }
+
 func (WugnotToken) Approve() func(spender pusers.AddressOrName, amount uint64) {
 	return wugnot.Approve
 }
