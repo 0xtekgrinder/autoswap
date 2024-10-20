@@ -1,4 +1,4 @@
-package gnoswap_optimizer
+package autoswap
 
 func GetVault(tokenId uint64) Vault {
 	vault := mustGetVault(tokenId)
@@ -23,6 +23,11 @@ func GetVaultToken1(tokenId uint64) string {
 func GetVaultFee(tokenId uint64) uint32 {
 	vault := mustGetVault(tokenId)
 	return vault.fee
+}
+
+func GetVaultWidth(tokenId uint64) uint32 {
+	vault := mustGetVault(tokenId)
+	return vault.width
 }
 
 func BalanceOf(tokenId uint64, account string) string {
