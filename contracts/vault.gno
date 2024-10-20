@@ -197,7 +197,7 @@ func RemoveKeeper(keeper std.Address) {
 // amount1Desired string the amount of token1 to deposit
 // amount0Min string the minimum amount of token0 to deposit
 // amount1Min string the minimum amount of token1 to deposit
-func Repn(
+func Reposition(
 	tokenId uint64,
 	tickLower int32,
 	tickUpper int32,
