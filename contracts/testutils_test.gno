@@ -8,11 +8,18 @@ import (
 
 	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
-
 	"gno.land/r/demo/wugnot"
 	"gno.land/r/gnoswap/v2/gns"
-
+	"gno.land/p/demo/testutils"
 	pl "gno.land/r/gnoswap/v2/pool"
+)
+
+var (
+	fresh01      = testutils.TestAddress("fresh01") // g1veex2umgxqc47h6lta047h6lta047h6lgnrusf
+	fresh02      = testutils.TestAddress("fresh02") // g1veex2umgxqe97h6lta047h6lta047h6lhqv0lu
+	fresh01Realm = std.NewUserRealm(fresh01)
+	fresh02Realm = std.NewUserRealm(fresh02)
+	adminRealm   = std.NewUserRealm(consts.ADMIN)
 )
 
 func initPool() {

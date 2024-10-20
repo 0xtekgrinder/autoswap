@@ -1,11 +1,12 @@
-package gnoswap_optimizer
+package autoswap
 
 import (
-	"fmt"
 	"std"
 
+	"gno.land/p/demo/avl"
+	"gno.land/p/demo/ufmt"
+	"gno.land/p/demo/uint256"
 	pusers "gno.land/p/demo/users"
-	u256 "gno.land/p/gnoswap/uint256"
 	"gno.land/r/gnoswap/v2/consts"
 )
 
@@ -17,61 +18,50 @@ type GRC20Interface interface {
 }
 
 var (
-	registered = make(map[string]GRC20Interface)
-	locked     = false // mutex
+	registered *avl.Tree // pkgPath -> GRC20Interface
+	locked     bool      // prevent reentrancy
 )
 
-func GetRegisteredTokens() []string {
-	tokens := make([]string, 0, len(registered))
-	for k := range registered {
-		tokens = append(tokens, k)
-	}
-	return tokens
+func init() {
+	registered = avl.NewTree()
 }
 
 func RegisterGRC20Interface(pkgPath string, igrc20 GRC20Interface) {
-	caller := std.GetOrigCaller()
-	if caller != consts.TOKEN_REGISTER {
-		panic(fmt.Sprintf("unauthorized address(%s) to register", caller.String()))
-	}
+	caller := std.PrevRealm().Addr()
+	mustHaveRole(caller, "admin")
 
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
+	_, found := registered.Get(pkgPath)
 	if found {
-		panic(fmt.Sprintf("pkgPath(%s) already registered", pkgPath))
+		panic(ufmt.Sprintf("pkgPath(%s) already registered", pkgPath))
 	}
 
-	registered[pkgPath] = igrc20
+	registered.Set(pkgPath, igrc20)
 }
 
 func UnregisterGRC20Interface(pkgPath string) {
-	// only admin can unregister
-	caller := std.GetOrigCaller()
-	if caller != consts.TOKEN_REGISTER {
-		panic(fmt.Sprintf("unauthorized address(%s) to unregister", caller.String()))
-	}
+	caller := std.PrevRealm().Addr()
+	mustHaveRole(caller, "admin")
 
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
-	if found {
-		delete(registered, pkgPath)
+	_, found := registered.Get(pkgPath)
+	if !found {
+		panic(ufmt.Sprintf("pkgPath(%s) not registered", pkgPath))
 	}
+	registered.Remove(pkgPath)
 }
 
 func transferByRegisterCall(pkgPath string, to std.Address, amount string) bool {
 	amountParsed := checkAmountRange(amount)
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
-	if !found {
-		panic(fmt.Sprintf("pkgPath(%s) not found", pkgPath))
-	}
+	grc20 := mustGetRegistered(pkgPath)
 
 	if !locked {
 		locked = true
-		registered[pkgPath].Transfer()(pusers.AddressOrName(to), amountParsed)
+		grc20.Transfer()(pusers.AddressOrName(to), amountParsed)
 
 		defer func() {
 			locked = false
@@ -86,14 +76,11 @@ func transferFromByRegisterCall(pkgPath string, from, to std.Address, amount str
 	amountParsed := checkAmountRange(amount)
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
-	if !found {
-		panic(fmt.Sprintf("pkgPath(%s) not found", pkgPath))
-	}
+	grc20 := mustGetRegistered(pkgPath)
 
 	if !locked {
 		locked = true
-		registered[pkgPath].TransferFrom()(pusers.AddressOrName(from), pusers.AddressOrName(to), amountParsed)
+		grc20.TransferFrom()(pusers.AddressOrName(from), pusers.AddressOrName(to), amountParsed)
 
 		defer func() {
 			locked = false
@@ -107,12 +94,9 @@ func transferFromByRegisterCall(pkgPath string, from, to std.Address, amount str
 func balanceOfByRegisterCall(pkgPath string, owner std.Address) uint64 {
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
-	if !found {
-		panic(fmt.Sprintf("pkgPath(%s) not found", pkgPath))
-	}
+	grc20 := mustGetRegistered(pkgPath)
 
-	balance := registered[pkgPath].BalanceOf()(pusers.AddressOrName(owner))
+	balance := grc20.BalanceOf()(pusers.AddressOrName(owner))
 	return balance
 }
 
@@ -120,12 +104,9 @@ func approveByRegisterCall(pkgPath string, spender std.Address, amount string) b
 	amountParsed := checkAmountRange(amount)
 	pkgPath = handleNative(pkgPath)
 
-	_, found := registered[pkgPath]
-	if !found {
-		panic(fmt.Sprintf("pkgPath(%s) not found", pkgPath))
-	}
+	grc20 := mustGetRegistered(pkgPath)
 
-	registered[pkgPath].Approve()(pusers.AddressOrName(spender), amountParsed)
+	grc20.Approve()(pusers.AddressOrName(spender), amountParsed)
 
 	return true
 }
@@ -140,10 +121,7 @@ func handleNative(pkgPath string) string {
 
 func checkAmountRange(amount string) uint64 {
 	// check amount is in uint64 range
-	amountParsed, err := u256.FromDecimal(amount)
-	if err != nil {
-		panic(fmt.Sprintf("amount(%s) is not in uint64 range", amount))
-	}
+	amountParsed := uint256.MustFromDecimal(amount)
 
 	return amountParsed.Uint64()
 }
