@@ -6,11 +6,11 @@ import (
 
 	pusers "gno.land/p/demo/users"
 
+	"gno.land/p/demo/testutils"
+	"gno.land/r/gnoswap/v2/bar"
 	"gno.land/r/gnoswap/v2/common"
 	"gno.land/r/gnoswap/v2/consts"
-	"gno.land/r/demo/wugnot"
-	"gno.land/r/gnoswap/v2/gns"
-	"gno.land/p/demo/testutils"
+	"gno.land/r/gnoswap/v2/foo"
 	pl "gno.land/r/gnoswap/v2/pool"
 )
 
@@ -24,52 +24,59 @@ var (
 
 func initPool() {
 	std.TestSetRealm(adminRealm)
+
+	bar.Transfer(a2u(fresh01), 10000000)
+	foo.Transfer(a2u(fresh01), 10000000)
+
 	pl.SetPoolCreationFeeByAdmin(0)
-	pl.CreatePool(consts.GNOT, consts.GNS_PATH, 500, common.TickMathGetSqrtRatioAtTick(-10000).ToString())
+	pl.CreatePool("gno.land/r/gnoswap/v2/bar", "gno.land/r/gnoswap/v2/foo", 500, common.TickMathGetSqrtRatioAtTick(1).ToString())
 }
 
-type WugnotToken struct{}
+type FooToken struct{}
 
-func (WugnotToken) Transfer() func(to pusers.AddressOrName, amount uint64) {
-	return wugnot.Transfer
-}
-func (WugnotToken) TransferFrom() func(from, to pusers.AddressOrName, amount uint64) {
-	return wugnot.TransferFrom
-}
-func (WugnotToken) BalanceOf() func(owner pusers.AddressOrName) uint64 {
-	return wugnot.BalanceOf
-}
-func (WugnotToken) Approve() func(spender pusers.AddressOrName, amount uint64) {
-	return wugnot.Approve
+func (FooToken) Transfer() func(to pusers.AddressOrName, amount uint64) {
+	return foo.Transfer
 }
 
-type GNSToken struct{}
-
-func (GNSToken) Transfer() func(to pusers.AddressOrName, amount uint64) {
-	return gns.Transfer
+func (FooToken) TransferFrom() func(from, to pusers.AddressOrName, amount uint64) {
+	return foo.TransferFrom
 }
 
-func (GNSToken) TransferFrom() func(from, to pusers.AddressOrName, amount uint64) {
-	return gns.TransferFrom
+func (FooToken) BalanceOf() func(owner pusers.AddressOrName) uint64 {
+	return foo.BalanceOf
 }
 
-func (GNSToken) BalanceOf() func(owner pusers.AddressOrName) uint64 {
-	return gns.BalanceOf
+func (FooToken) Approve() func(spender pusers.AddressOrName, amount uint64) {
+	return foo.Approve
 }
 
-func (GNSToken) Approve() func(spender pusers.AddressOrName, amount uint64) {
-	return gns.Approve
+type BarToken struct{}
+
+func (BarToken) Transfer() func(to pusers.AddressOrName, amount uint64) {
+	return bar.Transfer
+}
+
+func (BarToken) TransferFrom() func(from, to pusers.AddressOrName, amount uint64) {
+	return bar.TransferFrom
+}
+
+func (BarToken) BalanceOf() func(owner pusers.AddressOrName) uint64 {
+	return bar.BalanceOf
+}
+
+func (BarToken) Approve() func(spender pusers.AddressOrName, amount uint64) {
+	return bar.Approve
 }
 
 func initTokenRegistries() {
-	RegisterGRC20Interface("gno.land/r/demo/wugnot", WugnotToken{})
-	RegisterGRC20Interface("gno.land/r/gnoswap/v2/gns", GNSToken{})
+	RegisterGRC20Interface("gno.land/r/gnoswap/v2/foo", FooToken{})
+	RegisterGRC20Interface("gno.land/r/gnoswap/v2/bar", BarToken{})
 
 	tokenRegisterRealm := std.NewUserRealm(consts.TOKEN_REGISTER)
 	std.TestSetRealm(tokenRegisterRealm)
 
-	pl.RegisterGRC20Interface("gno.land/r/demo/wugnot", WugnotToken{})
-	pl.RegisterGRC20Interface("gno.land/r/gnoswap/v2/gns", GNSToken{})
+	pl.RegisterGRC20Interface("gno.land/r/gnoswap/v2/foo", FooToken{})
+	pl.RegisterGRC20Interface("gno.land/r/gnoswap/v2/bar", BarToken{})
 }
 
 func a2u(addr std.Address) pusers.AddressOrName {
