@@ -20,6 +20,8 @@ This is called Automated Liquidity Management (ALM).
 
 To tests the contracts, you first need to clone the gnoswap repository and add it to the gno root directory in the `examples` folder with the corresponding path between /p and /r.
 
+You also need to do the same for foo and bar located at `contracts/mock/foo` and `contracts/mock/bar`
+
 Then you can run the following commands:
 
 ```bash
