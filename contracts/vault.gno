@@ -35,7 +35,7 @@ func init() {
 // amount0Min string the minimum amount of token0 to deposit
 // amount1Min string the minimum amount of token1 to deposit
 // deadline int64 the deadline for the transaction
-func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min string, amount1Min string, deadline int64) {
+func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min string, amount1Min string, deadline int64) (string, string, string) {
 	vault := mustGetVault(tokenId)
 	assertVaultPaused(vault)
 
@@ -66,6 +66,8 @@ func DepositMulti(tokenId uint64, amount0 string, amount1 string, amount0Min str
 	}
 
 	std.Emit("Deposit", "caller", caller.String(), "tokenId", strconv.FormatUint(tokenId, 10), "amount0Used", amount0Used, "amount1Used", amount1Used, "balanceAdded", liquidity)
+
+	return liquidity, amount0Used, amount1Used
 }
 
 // DepositSingle deposits a single token into a vault
@@ -84,7 +86,7 @@ func DepositSingle(tokenId uint64, token string, amount string) {
 // amount string the amount of liquidity to withdraw
 //
 // panic if the amount is greater than the caller's balance
-func Withdraw(tokenId uint64, amount string) {
+func Withdraw(tokenId uint64, amount string) (string, string, string) {
 	vault := mustGetVault(tokenId)
 	caller := std.PrevRealm().Addr()
 	balance := mustGetBalance(vault, caller.String())
@@ -104,12 +106,8 @@ func Withdraw(tokenId uint64, amount string) {
 	transferByRegisterCall(vault.token1, caller, amount1)
 
 	std.Emit("Withdraw", "caller", caller.String(), "tokenId", strconv.FormatUint(tokenId, 10), "amount0Withdrawn", amount0, "amount1Withdrawn", amount1, "balanceRemoved", liquidity)
-}
 
-func Compound(tokenId uint64) {
-	vault := mustGetVault(tokenId)
-
-	// TODO implement
+	return liquidity, amount0, amount1
 }
 
 /**
@@ -138,7 +136,7 @@ func NewVault(
 	amount0Min string, // *uint256.Uint
 	amount1Min string, // *uint256.Uint
 	deadline int64,
-) {
+) (uint64, string, string, string) {
 	caller := std.PrevRealm().Addr()
 	mustHaveRole(caller, "admin")
 
@@ -157,6 +155,8 @@ func NewVault(
 	vaults.Set(strconv.FormatUint(tokenId, 10), vault)
 
 	std.Emit("NewVault", "tokenId", strconv.FormatUint(tokenId, 10), "token0", token0, "token1", token1, "fee", strconv.FormatUint(uint64(fee), 10), "tickLower", strconv.FormatInt(int64(tickLower), 10), "tickUpper", strconv.FormatInt(int64(tickUpper), 10))
+
+	return tokenId, liquidity, amount0Used, amount1Used
 }
 
 // TogglePause pause deposits for a vault
@@ -220,4 +220,13 @@ func Reposition(
 	pn.Reposition(tokenId, tickLower, tickUpper, amount0Desired, amount1Desired, amount0Min, amount1Min)
 
 	std.Emit("Reposition", "tokenId", strconv.FormatUint(tokenId, 10), "tickLower", strconv.FormatInt(int64(tickLower), 10), "tickUpper", strconv.FormatInt(int64(tickUpper), 10))
+}
+
+
+func Compound(tokenId uint64) {
+	mustHaveRole(std.PrevRealm().Addr(), "keeper")
+
+	vault := mustGetVault(tokenId)
+
+	// TODO implement
 }
