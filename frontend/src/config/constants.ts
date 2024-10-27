@@ -1,0 +1,1 @@
+export const txIndexerUrl = process.env.REACT_APP_TX_INDEXER_URL || 'http://localhost:3100';

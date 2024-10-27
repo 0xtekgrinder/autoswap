@@ -1,0 +1,19 @@
+services:
+  frontend:
+     build: frontend
+     restart: always
+     ports:
+       - "80:3000"
+     environment:
+       - REACT_APP_TX_INDEXER_URL=tx-indexer:8546
+  tx-indexer:
+    build: tx-indexer
+    restart: always
+    ports:
+      - "8546:8546"
+    entrypoint: ["/usr/local/bin/indexer", "start", "--remote", "https://rpc.test4.gno.land", "--db-path", "indexer-db"]
+    volumes:
+      - ./indexer-db:/indexer-db
+
+volumes:
+  indexer-db:

@@ -11,7 +11,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-const WithdrawModal: React.FC<{ isOpen: boolean; onOpen: () => void; onClose: () => void }> = ({ isOpen, onOpen, onClose }) => {
+const WithdrawModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const [input1, setInput1] = useState('');
   const [input2, setInput2] = useState('');
 

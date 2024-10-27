@@ -8,5 +8,6 @@ type Pool = {
     TVL: number;
     APY: number;
     balance: number;
+    tokenId: string;
 }
 export type { Pool };
