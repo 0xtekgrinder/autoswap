@@ -4,12 +4,11 @@ import { SimpleGrid, Box, useDisclosure } from '@chakra-ui/react';
 import PoolCard from './PoolCard';
 import { useState } from 'react';
 import { Pool } from '../types/pool';
-import { on } from 'events';
 import DepositModal from './DepositModal';
 import WithdrawModal from './WithdrawModal';
 
 const PoolGrid: React.FC= () => {
-    const [pools, setPools] = useState<Pool[]>([
+    const [pools] = useState<Pool[]>([
         {
             token0: 'ETH',
             token1: 'USDC',
@@ -49,8 +48,8 @@ const PoolGrid: React.FC= () => {
 
   return (
     <>
-    <DepositModal isOpen={isOpenDeposit} onOpen={onOpenDeposit} onClose={onCloseDeposit} />
-    <WithdrawModal isOpen={isOpenWithdraw} onOpen={onOpenWithdraw} onClose={onCloseWithdraw} />
+    <DepositModal isOpen={isOpenDeposit} onClose={onCloseDeposit} />
+    <WithdrawModal isOpen={isOpenWithdraw} onClose={onCloseWithdraw} />
     <SimpleGrid columns={{ sm: 1, md: 2, lg: 3 }} spacing={8} w="full">
       {pools.map((pool) => (
           <Box key={`${pool.token0}-${pool.token1}`} display="flex" justifyContent="center">

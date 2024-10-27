@@ -12,7 +12,7 @@ import {
   Input,
 } from '@chakra-ui/react';
 
-const DepositModal: React.FC<{ isOpen: boolean; onOpen: () => void; onClose: () => void }> = ({ isOpen, onOpen, onClose }) => {
+const DepositModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
   const [mode, setMode] = useState<'single' | 'double'>('single');
   const [singleInput, setSingleInput] = useState('');
   const [doubleInput1, setDoubleInput1] = useState('');

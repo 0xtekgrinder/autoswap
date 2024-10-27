@@ -11,15 +11,15 @@ const AdenaWallet = () => {
 
     const integrateWallet = async () => {
       // Look for the adena object
-      if (!window.adena) {
+      if (!(window as any).adena) { // eslint-disable-line
         // Open adena.app in a new tab if the adena object is not found
         window.open("https://adena.app/", "_blank");
       } else {
         // Add connection
-        const connection = await adena.AddEstablish("GnoALM");
+        const connection = await (window as any).adena.AddEstablish("GnoALM"); // eslint-disable-line
         console.log("connection, ", JSON.stringify(connection))
 
-        const account = await adena.GetAccount()
+        const account = await (window as any).adena.GetAccount() // eslint-disable-line
         console.log("account, ", JSON.stringify(account))
         setAccount(account.data.address)
       }
